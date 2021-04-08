@@ -1,10 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'styled-components';
+
+import GlobalStyle from '../styles/globalStyles';
+import * as theme from '../styles/themeStyles';
+import 'antd/dist/antd.css';
+
+import Dashboard from './Dashboard';
 
 const App: React.FC = () => {
   return (
     <>
-      <h1>Test App</h1>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Dashboard />
+      </ThemeProvider>
     </>
   );
 };
