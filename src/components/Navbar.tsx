@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Navbar: React.FC = () => {
   return (
-    <NavbarContainer>
+    <NavbarContainer className="d-flex align-items-center">
       <div>
         <h3 className="mb-0">Book Repository</h3>
       </div>
@@ -16,6 +16,7 @@ const NavbarContainer = styled.div`
   background-color: ${(props) => props.theme.White};
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   z-index: 999;
+  height: 5rem;
 `;
 
 export default Navbar;
