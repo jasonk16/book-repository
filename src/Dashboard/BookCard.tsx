@@ -63,7 +63,7 @@ const BookCard: React.FC<BookCardProps> = ({ bookDetails, isDelete, selected }) 
 
   return (
     <motion.div variants={bookCardAnimation}>
-      <label htmlFor={bookDetails.isbn}>
+      <label htmlFor={bookDetails.isbn} className="w-100">
         <BookContainer className="my-1 m-lg-3" onClick={() => onBookCardSelect()}>
           {isDelete && (
             <SelectCheckbox>
@@ -74,7 +74,7 @@ const BookCard: React.FC<BookCardProps> = ({ bookDetails, isDelete, selected }) 
             <BookFrame className="d-flex justify-content-center align-items-center">
               <BookShortform>{bookDetails.title.substring(0, 2)}</BookShortform>
             </BookFrame>
-            <BookTextContainer className="py-3 py-lg-0 my-lg-3 ml-3 ml-lg-0">
+            <BookTextContainer className="p-3 p-lg-0 my-lg-3">
               <Tooltip title={bookDetails.title} mouseEnterDelay={0.1}>
                 <BookTitle className="mb-1">{bookDetails.title}</BookTitle>
               </Tooltip>
@@ -94,6 +94,7 @@ const BookContainer = styled.div`
   ${(props) => props.theme.media.mobileTablet} {
     width: 100%;
     background-color: ${(props) => props.theme.White};
+    border-radius: 8px;
   }
 `;
 const BookFrame = styled.div`
@@ -121,6 +122,7 @@ const BookTextContainer = styled.div`
 `;
 const BookShortform = styled.h1`
   color: ${(props) => props.theme.OldRose};
+  margin-bottom: 0;
 `;
 const BookTitle = styled.p`
   display: -webkit-box;
