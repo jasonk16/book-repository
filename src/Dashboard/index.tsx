@@ -1,38 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
+import { motion } from 'framer-motion';
 
-import bookData from '../../assets/books.json';
 import Navbar from '../components/Navbar';
 import BookCard from '../components/BookCard';
 import ControlButtons from '../components/ControlButtons';
 import { useModal } from '../components/ModalBox';
 import AddBook from '../components/AddBook';
-import { initialiseBookList, removeBooks } from '../functions/redux/actions';
+import { removeBooks } from '../functions/redux/actions';
+import { sortBooksByGenre } from '../functions';
 
 const Dashboard: React.FC = () => {
   const [deleteBooks, setDeleteBooks] = useState(false);
-  const [selectedBookList, setSelectedBookList] = useState<any>([]);
+  const [selectedBookList, setSelectedBookList] = useState<BookListProps[]>([]);
+  const [sortedBooksByGenre, setSortedBooksByGenre] = useState([]);
   const modal = useModal();
   const dispatch = useDispatch();
   const bookLists = useSelector((state: RootStateOrAny) => state.BookLists);
 
-  const sortBooksByGenre = () => {};
+  //animation to stagger children book card
+  const bookCardContainerAnimation = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-  const selectedBooksArray = (book: any) => {
+  //add selected books to the array of selected books
+  const selectedBooksArray = (book: BookListProps) => {
     if (!selectedBookList.includes(book)) {
-      setSelectedBookList((selectedBookList: any) => [...selectedBookList, book]);
+      setSelectedBookList((selectedBookList: BookListProps[]) => [...selectedBookList, book]);
     } else {
-      setSelectedBookList(selectedBookList.filter((bookObject: any) => bookObject !== book));
+      setSelectedBookList(selectedBookList.filter((bookObject: BookListProps) => bookObject !== book));
     }
   };
 
-  const removeBooksFromArray = () => {
-    dispatch(removeBooks(selectedBookList));
-    setDeleteBooks(false);
-    setSelectedBookList([]);
-  };
-
+  //process callback from control buttons to its corresponding actions.
   const controlButtonAction = (action: string) => {
     switch (action) {
       case 'add':
@@ -45,37 +52,46 @@ const Dashboard: React.FC = () => {
         setDeleteBooks(!deleteBooks);
         break;
       case 'confirmDelete':
-        removeBooksFromArray();
+        //remove books stored in redux, and reset state and array
+        dispatch(removeBooks(selectedBookList));
+        setDeleteBooks(false);
+        setSelectedBookList([]);
         break;
     }
   };
 
-  //populate book list to redux store upon mount.
+  //run sort feature to display genres as groups
   useEffect(() => {
-    dispatch(initialiseBookList(bookData));
-  }, []);
+    if (bookLists) {
+      setSortedBooksByGenre(sortBooksByGenre(bookLists));
+    }
+  }, [bookLists]);
 
   return (
     <>
       <Navbar />
       <Container>
         <ControlButtons action={controlButtonAction} deleteMode={deleteBooks} />
-        <div className="mt-4 mt-lg-0">
-          <h2>Non-fiction</h2>
-          <div className="d-flex">
-            {bookLists &&
-              bookLists.map((book: any) => {
-                return (
-                  <BookCard
-                    key={book.isbn}
-                    bookDetails={book}
-                    isDelete={deleteBooks}
-                    selected={(event) => selectedBooksArray(book)}
-                  />
-                );
-              })}
-          </div>
-        </div>
+        {Object.keys(sortedBooksByGenre).length !== 0 &&
+          Object.keys(sortedBooksByGenre).map((genre) => {
+            return (
+              <div key={genre} className="mt-5">
+                <h2>{genre}</h2>
+                <motion.div className="d-lg-flex" variants={bookCardContainerAnimation} initial="hidden" animate="show">
+                  {sortedBooksByGenre[genre].map((book: BookListProps) => {
+                    return (
+                      <BookCard
+                        key={book.isbn}
+                        bookDetails={book}
+                        isDelete={deleteBooks}
+                        selected={() => selectedBooksArray(book)}
+                      />
+                    );
+                  })}
+                </motion.div>
+              </div>
+            );
+          })}
       </Container>
     </>
   );

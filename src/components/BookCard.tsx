@@ -1,24 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tooltip, Checkbox, Button } from 'antd';
+import { motion } from 'framer-motion';
 
 import { useModal, useModalToggle } from '../components/ModalBox';
 
 type BookCardProps = {
-  bookDetails: BookDetailsProps;
+  bookDetails: BookListProps;
   isDelete: boolean;
   selected: (event: any) => void;
 };
 
-type BookDetailsProps = {
-  title: string;
-  isbn: string;
-  genre: string;
-  summary: string;
-};
-
 type BookInfoContainerProps = {
-  bookDetails: BookDetailsProps;
+  bookDetails: BookListProps;
 };
 
 const BookInfoContainer: React.FC<BookInfoContainerProps> = ({ bookDetails }) => {
@@ -27,7 +21,7 @@ const BookInfoContainer: React.FC<BookInfoContainerProps> = ({ bookDetails }) =>
   return (
     <BookInfoModal>
       <h3>{bookDetails.title}</h3>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex flex-column flex-lg-row justify-content-between">
         <p>{bookDetails.genre}</p>
         <p>ISBN: {bookDetails.isbn}</p>
       </div>
@@ -52,31 +46,40 @@ const BookInfoContainer: React.FC<BookInfoContainerProps> = ({ bookDetails }) =>
 
 const BookCard: React.FC<BookCardProps> = ({ bookDetails, isDelete, selected }) => {
   const modal = useModal();
+
   const onBookCardSelect = () => {
     if (!isDelete) {
       modal(<BookInfoContainer bookDetails={bookDetails} />);
     }
   };
 
+  //animation for each individual card
+  const bookCardAnimation = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+  };
+
   return (
-    <>
-      <BookContainer className="mx-3" onClick={() => onBookCardSelect()}>
+    <motion.div variants={bookCardAnimation}>
+      <BookContainer className="my-3 m-lg-3" onClick={() => onBookCardSelect()}>
         {isDelete && (
           <SelectCheckbox>
             <Checkbox onChange={selected} />
           </SelectCheckbox>
         )}
-        <BookFrame className="d-flex justify-content-center align-items-center">
-          <BookShortform>{bookDetails.title.substring(0, 2)}</BookShortform>
-        </BookFrame>
-        <div className="my-3">
-          <Tooltip title={bookDetails.title} mouseEnterDelay={0.1}>
-            <BookTitle className="mb-1">{bookDetails.title}</BookTitle>
-          </Tooltip>
-          <SmallText>ISBN: {bookDetails.isbn}</SmallText>
+        <div className="d-flex flex-row flex-lg-column">
+          <BookFrame className="d-flex justify-content-center align-items-center">
+            <BookShortform>{bookDetails.title.substring(0, 2)}</BookShortform>
+          </BookFrame>
+          <BookTextContainer className="my-lg-3 ml-3 ml-lg-0">
+            <Tooltip title={bookDetails.title} mouseEnterDelay={0.1}>
+              <BookTitle className="mb-1">{bookDetails.title}</BookTitle>
+            </Tooltip>
+            <SmallText>ISBN: {bookDetails.isbn}</SmallText>
+          </BookTextContainer>
         </div>
       </BookContainer>
-    </>
+    </motion.div>
   );
 };
 
@@ -84,17 +87,32 @@ const BookContainer = styled.div`
   width: 14rem;
   cursor: pointer;
   position: relative;
+  ${(props) => props.theme.media.mobileTablet} {
+    width: 100%;
+  }
 `;
 const BookFrame = styled.div`
   height: 18rem;
   width: 14rem;
   background-color: ${(props) => props.theme.LightPink};
   border-radius: 8px;
+  ${(props) => props.theme.media.mobileTablet} {
+    height: 8rem;
+    width: 6rem;
+  }
 `;
 const SelectCheckbox = styled.div`
   position: absolute;
   top: 10px;
   right: 10px;
+  ${(props) => props.theme.media.mobileTablet} {
+    left: 10px;
+  }
+`;
+const BookTextContainer = styled.div`
+  ${(props) => props.theme.media.mobileTablet} {
+    width: 70%;
+  }
 `;
 const BookShortform = styled.h1`
   color: ${(props) => props.theme.OldRose};
@@ -113,11 +131,17 @@ const GreyBodyText = styled.p`
 `;
 const BookInfoModal = styled.div`
   max-width: 50vw;
+  ${(props) => props.theme.media.mobileTablet} {
+    max-width: 100%;
+  }
 `;
 const SummaryTextContainer = styled.div`
   max-height: 20rem;
   overflow-y: scroll;
   min-width: 30rem;
+  ${(props) => props.theme.media.mobileTablet} {
+    min-width: 100%;
+  }
 `;
 
 export default BookCard;

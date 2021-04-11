@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from 'antd/es/button';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, CloseOutlined } from '@ant-design/icons';
 
 type ControlButtonsProps = {
   action: (action: string) => void;
@@ -22,10 +22,10 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({ action, deleteMode }) =
             danger
             onClick={() => action('confirmDelete')}
           >
-            CONFIRM DELETE
+            CONFIRM
           </Button>
           <Button
-            icon={<DeleteOutlined />}
+            icon={<CloseOutlined />}
             shape="round"
             size="large"
             className="d-flex align-items-center mx-2"
@@ -56,7 +56,7 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({ action, deleteMode }) =
             className="d-flex align-items-center mx-2"
             onClick={() => action('add')}
           >
-                 <div className="d-none d-md-block ml-2">ADD BOOK</div>
+            <div className="d-none d-md-block ml-2">ADD BOOK</div>
           </Button>
         </>
       )}
@@ -67,6 +67,7 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({ action, deleteMode }) =
 const ControlButtonsContainer = styled.div`
   position: sticky;
   top: 10px;
+  z-index: 999;
 `;
 
 export default ControlButtons;

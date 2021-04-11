@@ -32,6 +32,7 @@ p{
   font-size: 1.15rem;
   font-weight: 400; 
   letter-spacing: 0.031rem; 
+  line-height: 1.2;
 }
 small{
   font-size: 0.875rem;

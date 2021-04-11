@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ModalContent = React.createContext(null);
 const ToggleModalBox = React.createContext(null);
@@ -13,7 +14,7 @@ export const useModalToggle = () => {
 
 const ModalBox: React.FC = ({ children }) => {
   const [isActive, setIsActive] = useState(false);
-  const [modalContent, setModalContent] = useState<any>();
+  const [modalContent, setModalContent] = useState<React.FC>();
   const modalBackgroundArea = useRef(null);
 
   const toggleDisplay = () => {
@@ -52,11 +53,21 @@ const ModalBox: React.FC = ({ children }) => {
     <ModalContent.Provider value={toggleContent}>
       <ToggleModalBox.Provider value={toggleDisplay}>
         {children}
-        {isActive && (
-          <ModalBackground>
-            <InnerModal ref={modalBackgroundArea}>{modalContent}</InnerModal>
-          </ModalBackground>
-        )}
+        <AnimatePresence>
+          {isActive && (
+            <ModalBackground>
+              <InnerModal
+                initial={{ y: 1000, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                exit={{ y: 1000, opacity: 0 }}
+                ref={modalBackgroundArea}
+              >
+                {modalContent}
+              </InnerModal>
+            </ModalBackground>
+          )}
+        </AnimatePresence>
       </ToggleModalBox.Provider>
     </ModalContent.Provider>
   );
@@ -77,11 +88,14 @@ const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const InnerModal = styled.div`
+const InnerModal = styled(motion.div)`
   max-width: 80%;
   background: ${(props) => props.theme.White};
   border-radius: 15px;
   padding: 2rem;
+  ${(props) => props.theme.media.mobileTablet} {
+    max-width: 100%;
+  }
 `;
 
 export default ModalBox;

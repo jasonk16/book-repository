@@ -15,5 +15,5 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["src"]
+  "include": ["src", "types"]
 }

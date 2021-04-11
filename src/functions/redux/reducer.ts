@@ -1,24 +1,18 @@
 import { combineReducers } from 'redux';
 
+import bookData from '../../../assets/books.json';
+
+//adds initial state to store on application initialisation
 const initialState = {
-  BookLists: [
-    {
-      title: '',
-      isbn: '',
-      genre: '',
-      summary: '',
-    },
-  ],
+  BookLists: bookData,
 };
 
-const BookLists = (state = initialState.BookLists, action: any) => {
+const BookLists = (state = initialState.BookLists, action: ReducerProps) => {
   switch (action.type) {
-    case 'INIT_BOOK_LIST':
-      return action.payload;
     case 'ADD_BOOK':
       return [...state, action.payload];
     case 'REMOVE_BOOKS':
-      return [...state.filter((book: any) => !action.payload.includes(book))];
+      return [...state.filter((book: BookListProps) => !action.payload.includes(book))];
     default:
       return state;
   }

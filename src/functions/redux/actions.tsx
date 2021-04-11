@@ -1,22 +1,8 @@
-type BookListProps = {
-  title: string;
-  isbn: string;
-  genre: string;
-  summary: string;
-}[];
-
-export const initialiseBookList = (bookArray: BookListProps) => {
-  return {
-    type: 'INIT_BOOK_LIST',
-    payload: [...bookArray],
-  };
-};
-
-export const addBookToList = (book: any) => {
+export const addBookToList = (book: BookListProps) => {
   return {
     type: 'ADD_BOOK',
     payload: {
-      title: book.bookName,
+      title: book.title,
       isbn: book.isbn,
       genre: book.genre,
       summary: book.summary,
@@ -24,7 +10,7 @@ export const addBookToList = (book: any) => {
   };
 };
 
-export const removeBooks = (bookArray: BookListProps) => {
+export const removeBooks = (bookArray: BookListProps[]) => {
   return {
     type: 'REMOVE_BOOKS',
     payload: [...bookArray],
