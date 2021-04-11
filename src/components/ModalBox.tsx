@@ -12,6 +12,7 @@ export const useModalToggle = () => {
   return useContext(ToggleModalBox);
 };
 
+//modal box is to be used as context, so that it can be used in any part of the app.
 const ModalBox: React.FC = ({ children }) => {
   const [isActive, setIsActive] = useState(false);
   const [modalContent, setModalContent] = useState<React.FC>();

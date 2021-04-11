@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from 'antd/es/button';
 import { PlusOutlined, DeleteOutlined, CloseOutlined } from '@ant-design/icons';
@@ -6,9 +6,11 @@ import { PlusOutlined, DeleteOutlined, CloseOutlined } from '@ant-design/icons';
 type ControlButtonsProps = {
   action: (action: string) => void;
   deleteMode: boolean;
+  disableDelete?: boolean;
 };
 
-const ControlButtons: React.FC<ControlButtonsProps> = ({ action, deleteMode }) => {
+//component that contains the control buttons to add/delete books.
+const ControlButtons: React.FC<ControlButtonsProps> = ({ action, deleteMode, disableDelete }) => {
   return (
     <ControlButtonsContainer className="d-flex justify-content-end">
       {deleteMode ? (
@@ -20,6 +22,7 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({ action, deleteMode }) =
             size="large"
             className="d-flex align-items-center mx-2"
             danger
+            disabled={disableDelete}
             onClick={() => action('confirmDelete')}
           >
             CONFIRM

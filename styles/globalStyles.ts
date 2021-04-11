@@ -5,7 +5,7 @@ root{
   width: 100%; 
 }
 body{
-  background: #FBFBFB;
+  background: #F2F2F2;
   font-family: 'Montserrat', sans-serif;
 }
 h1{

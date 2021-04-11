@@ -8,13 +8,14 @@ import { useModal, useModalToggle } from '../components/ModalBox';
 type BookCardProps = {
   bookDetails: BookListProps;
   isDelete: boolean;
-  selected: (event: any) => void;
+  selected: () => void;
 };
 
 type BookInfoContainerProps = {
   bookDetails: BookListProps;
 };
 
+//Component to display book info in modal box when clicked.
 const BookInfoContainer: React.FC<BookInfoContainerProps> = ({ bookDetails }) => {
   const toggleModal = useModalToggle();
 
@@ -27,7 +28,7 @@ const BookInfoContainer: React.FC<BookInfoContainerProps> = ({ bookDetails }) =>
       </div>
       <h4>Summary</h4>
       <SummaryTextContainer>
-        <GreyBodyText>{bookDetails.summary}</GreyBodyText>
+        <SummaryText>{bookDetails.summary}</SummaryText>
       </SummaryTextContainer>
       <div className="d-flex justify-content-end">
         <Button
@@ -44,6 +45,7 @@ const BookInfoContainer: React.FC<BookInfoContainerProps> = ({ bookDetails }) =>
   );
 };
 
+//component to display individual book
 const BookCard: React.FC<BookCardProps> = ({ bookDetails, isDelete, selected }) => {
   const modal = useModal();
 
@@ -61,24 +63,26 @@ const BookCard: React.FC<BookCardProps> = ({ bookDetails, isDelete, selected }) 
 
   return (
     <motion.div variants={bookCardAnimation}>
-      <BookContainer className="my-3 m-lg-3" onClick={() => onBookCardSelect()}>
-        {isDelete && (
-          <SelectCheckbox>
-            <Checkbox onChange={selected} />
-          </SelectCheckbox>
-        )}
-        <div className="d-flex flex-row flex-lg-column">
-          <BookFrame className="d-flex justify-content-center align-items-center">
-            <BookShortform>{bookDetails.title.substring(0, 2)}</BookShortform>
-          </BookFrame>
-          <BookTextContainer className="my-lg-3 ml-3 ml-lg-0">
-            <Tooltip title={bookDetails.title} mouseEnterDelay={0.1}>
-              <BookTitle className="mb-1">{bookDetails.title}</BookTitle>
-            </Tooltip>
-            <SmallText>ISBN: {bookDetails.isbn}</SmallText>
-          </BookTextContainer>
-        </div>
-      </BookContainer>
+      <label htmlFor={bookDetails.isbn}>
+        <BookContainer className="my-1 m-lg-3" onClick={() => onBookCardSelect()}>
+          {isDelete && (
+            <SelectCheckbox>
+              <Checkbox id={bookDetails.isbn} onChange={selected} />
+            </SelectCheckbox>
+          )}
+          <div className="d-flex flex-row flex-lg-column">
+            <BookFrame className="d-flex justify-content-center align-items-center">
+              <BookShortform>{bookDetails.title.substring(0, 2)}</BookShortform>
+            </BookFrame>
+            <BookTextContainer className="py-3 py-lg-0 my-lg-3 ml-3 ml-lg-0">
+              <Tooltip title={bookDetails.title} mouseEnterDelay={0.1}>
+                <BookTitle className="mb-1">{bookDetails.title}</BookTitle>
+              </Tooltip>
+              <SmallText>ISBN: {bookDetails.isbn}</SmallText>
+            </BookTextContainer>
+          </div>
+        </BookContainer>
+      </label>
     </motion.div>
   );
 };
@@ -89,6 +93,7 @@ const BookContainer = styled.div`
   position: relative;
   ${(props) => props.theme.media.mobileTablet} {
     width: 100%;
+    background-color: ${(props) => props.theme.White};
   }
 `;
 const BookFrame = styled.div`
@@ -128,6 +133,9 @@ const SmallText = styled.small`
 `;
 const GreyBodyText = styled.p`
   color: ${(props) => props.theme.TextGrey};
+`;
+const SummaryText = styled(GreyBodyText)`
+  line-height: 1.5;
 `;
 const BookInfoModal = styled.div`
   max-width: 50vw;

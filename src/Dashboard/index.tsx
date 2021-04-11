@@ -4,12 +4,12 @@ import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
 import { motion } from 'framer-motion';
 
 import Navbar from '../components/Navbar';
-import BookCard from '../components/BookCard';
-import ControlButtons from '../components/ControlButtons';
+import BookCard from './BookCard';
+import ControlButtons from './ControlButtons';
 import { useModal } from '../components/ModalBox';
-import AddBook from '../components/AddBook';
+import AddBook from './AddBook';
 import { removeBooks } from '../functions/redux/actions';
-import { sortBooksByGenre } from '../functions';
+import { sortBooksByGenre } from '../functions/common';
 
 const Dashboard: React.FC = () => {
   const [deleteBooks, setDeleteBooks] = useState(false);
@@ -50,6 +50,7 @@ const Dashboard: React.FC = () => {
         break;
       case 'cancel':
         setDeleteBooks(!deleteBooks);
+        setSelectedBookList([]);
         break;
       case 'confirmDelete':
         //remove books stored in redux, and reset state and array
@@ -71,7 +72,11 @@ const Dashboard: React.FC = () => {
     <>
       <Navbar />
       <Container>
-        <ControlButtons action={controlButtonAction} deleteMode={deleteBooks} />
+        <ControlButtons
+          action={controlButtonAction}
+          deleteMode={deleteBooks}
+          disableDelete={selectedBookList.length === 0}
+        />
         {Object.keys(sortedBooksByGenre).length !== 0 &&
           Object.keys(sortedBooksByGenre).map((genre) => {
             return (

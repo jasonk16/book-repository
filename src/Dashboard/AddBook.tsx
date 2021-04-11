@@ -9,6 +9,7 @@ import { addBookToList } from '../functions/redux/actions';
 
 const { TextArea } = Input;
 
+//component to add book, to be shown in modal box.
 const AddBook: React.FC = () => {
   const toggleModal = useModalToggle();
   const dispatch = useDispatch();
